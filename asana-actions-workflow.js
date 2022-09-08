@@ -4,8 +4,8 @@ const ACTION_MOVE_TO_SECTION_PREFIX = 'MOVE_TO_SECTION'
 
 module.exports = async (core, github) => {
   const onOpenAction = core.getInput('on_open_action')
-  const failOnNoTask = core.getInput('fail_on_no_task')
   const onMergeAction = core.getInput('on_merge_action')
+  const onHotfixAction = core.getInput('on_hotfix_action')
 
   const isIssue = !!github.context.payload.issue
   const pr = github.context.payload.pull_request || github.context.payload.issue
@@ -62,7 +62,11 @@ module.exports = async (core, github) => {
   }
 
   if (action === 'closed' && (isIssue || pr.merged)) {
-    if (onMergeAction) await doAction(onMergeAction)
+    if (github.context.ref === 'main' && onHotfixAction) {
+      await doAction(onHotfixAction)
+    } else {
+      if (onMergeAction) await doAction(onMergeAction)
+    }
     await utils.completeAsanaTasks(tasks)
     core.info('Marked task(s) completed')
     return
