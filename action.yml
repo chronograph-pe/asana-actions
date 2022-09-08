@@ -22,8 +22,11 @@ inputs:
   on_merge_action:
     description: 'The action to perform when a PR is merged (CLOSE|MOVE <Section Name>).  Defaults to CLOSE'
     required: false
+  on_hotfix_action:
+    description: 'The action to perform when a PR is merged to main (CLOSE|MOVE <Section Name>).  Defaults to CLOSE'
+    required: false
 branding:
-  icon: 'chevron-right'  
+  icon: 'chevron-right'
   color: 'gray-dark'
 runs:
   using: 'node12'
